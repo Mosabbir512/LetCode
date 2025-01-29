@@ -1,0 +1,67 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left),
+ * right(right) {}
+ * };
+ */
+class Solution {
+public:
+    void fun(TreeNode* root, int tar, TreeNode*& node) {
+        if (!root)
+            return;
+        if (root->val == tar) {
+            node = root;
+            return;
+        }
+        fun(root->left, tar, node);
+        fun(root->right, tar, node);
+    }
+    void dfs(TreeNode* root, vector<int>& v) {
+        if (!root)
+            return;
+        dfs(root->left, v);
+        v.push_back(root->val);
+        dfs(root->right, v);
+    }
+    void recoverTree(TreeNode* root) {
+        vector<int> v, v1;
+        dfs(root, v);
+        for (auto it : v)
+            cout << it << " ";
+        cout << endl;
+        v1 = v;
+        sort(v1.begin(), v1.end());
+        for (auto it : v1)
+            cout << it << " ";
+        cout << endl;
+        int val1 = -1, val2 = -1;
+        bool firstval = false;
+        for (int i = 0; i < v.size(); i++) {
+            if (v[i] != v1[i]) {
+                if (!firstval) {
+                    val1 = v[i];
+                    firstval = true;
+                } else {
+                    val2 = v[i];
+                    break;
+                }
+            }
+        }
+        cout << val1 << " " << val2 << endl;
+        TreeNode* node1 = nullptr;
+        fun(root, val1, node1);
+        TreeNode* node2 = nullptr;
+        fun(root, val2, node2);
+        printf("%p\n", node1);
+        printf("%p", node2);
+        if (node1 && node2) {
+            swap(node1->val, node2->val);
+        }
+    }
+};
