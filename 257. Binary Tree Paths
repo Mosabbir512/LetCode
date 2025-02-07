@@ -1,0 +1,68 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left),
+ * right(right) {}
+ * };
+ */
+class Solution {
+public:
+    void dfs(TreeNode* root, vector<int>& v, vector<vector<int>>& tm) {
+        if (!root)
+            return;
+        int vl = root->val;
+        v.push_back(vl);
+        if (root->left == nullptr && root->right == nullptr) {
+            tm.push_back(v);
+        }
+        dfs(root->left, v, tm);
+        dfs(root->right, v, tm);
+        v.pop_back();
+    }
+    vector<string> binaryTreePaths(TreeNode* root) {
+        vector<string> ans;
+        vector<int> v;
+        vector<vector<int>> tm;
+        dfs(root, v, tm);
+        for (auto it : tm) {
+            string s = "";
+            bool first = false;
+            for (auto val : it) {
+                // cout << val << " ";
+                int tm = val;
+                if (first) {
+                    s += '-';
+                    s += '>';
+                }
+                if (val < 0) {
+                    s += '-';
+                    tm = tm * (-1);
+                }
+                cout << "tm = " << tm << "  ";
+                if (tm == 100) {
+                    s += '1';
+                    s += '0';
+                    s += '0';
+                } else if (tm >= 0 && tm <= 9) {
+                    s += (tm + '0');
+                } else {
+                    int r = tm / 10;
+                    char ch = r + '0';
+                    s += ch;
+                    r = tm % 10;
+                    ch = r + '0';
+                    s += ch;
+                }
+                first = true;
+            }
+            ans.push_back(s);
+            cout << endl;
+        }
+        return ans;
+    }
+};
