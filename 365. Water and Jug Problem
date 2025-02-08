@@ -1,0 +1,46 @@
+class Solution {
+public:
+    bool canMeasureWater(int x, int y, int target) {
+        const int N = 1005;
+        if(x>y)swap(x,y);
+        vector<int> vis(N, 0), ans;
+        ans.push_back(x);
+        vis[x] = 1;
+        if (vis[y] == 0)
+            ans.push_back(y);
+        while (1) {
+            int n = ans.size();
+            for (int i = 1; i < n; i++) {
+                int tm = ans[i] - ans[0];
+                if (tm != 0 && vis[tm] == 0) {
+                    vis[tm] = 1;
+                    ans.push_back(tm);
+                }
+            }
+            sort(ans.begin(), ans.end());
+            if (n == ans.size())
+                break;
+        }
+        for (auto it : ans)
+            cout << it << " ";
+        cout << endl;
+        if (target <= y) {
+            for (int i = 0; i < ans.size(); i++) {
+                if (target == ans[i]) {
+                    return true;
+                }
+            }
+           // return false;
+        }
+        else {
+            for(int i=0;i<ans.size();i++){
+                for(int j=0;j<ans.size();j++){
+                    if(i==j)continue;
+                    if(ans[i]+ans[j]==target)return true;
+                }
+            }
+           // return false;
+        }
+       return false;
+    }
+};
